@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { CheckCircle, XCircle, ArrowRight } from "lucide-react"
+import { CheckCircle, XCircle, ArrowRight, Sparkles, Zap } from "lucide-react"
 
 interface QuestionnaireProps {
   documentType: "dev-setup" | "user-guide"
@@ -22,21 +22,25 @@ const devSetupQuestions = [
     id: "includeMobileFrontend",
     question: "Will this guide include a mobile frontend?",
     description: "This will enable mobile frontend configuration and setup instructions.",
+    icon: "📱",
   },
   {
     id: "isContainerized",
     question: "Is your backend containerized (e.g., using Docker)?",
     description: "This will include containerization tools and deployment instructions.",
+    icon: "🐳",
   },
   {
     id: "includeApiTesting",
     question: "Will this guide include instructions for testing APIs?",
     description: "This will add API testing tools and testing workflow sections.",
+    icon: "🧪",
   },
   {
     id: "consumesExternalApis",
     question: "Does your project consume any external APIs?",
     description: "This will include external API configuration and integration instructions.",
+    icon: "🔗",
   },
 ]
 
@@ -59,14 +63,12 @@ export default function Questionnaire({ documentType, onComplete }: Questionnair
         setCurrentQuestionIndex(currentQuestionIndex + 1)
         setIsAnimating(false)
       } else {
-      
         onComplete(newAnswers as QuestionnaireAnswers)
       }
-    }, 500)
+    }, 600)
   }
 
   if (documentType === "user-guide") {
-   
     onComplete({
       includeMobileFrontend: false,
       isContainerized: false,
@@ -79,72 +81,100 @@ export default function Questionnaire({ documentType, onComplete }: Questionnair
   if (!currentQuestion) return null
 
   return (
-    <div className="flex items-center justify-center min-h-[60vh]">
-      <div className="w-full max-w-2xl">
-        <div className="text-center mb-8">
-          <h2 className="text-2xl font-semibold text-[#727D73] mb-2">Setup Configuration</h2>
-          <p className="text-[#727D73]/80">Answer a few questions to customize your developer setup guide</p>
-          <div className="flex justify-center mt-4">
-            <div className="flex space-x-2">
+    <div className="flex items-center justify-center min-h-[70vh]">
+      <div className="w-full max-w-3xl">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <br></br>
+          <h2 className="text-4xl font-bold text-[#727D73] mb-4">Let's customize your guide</h2>
+          <p className="text-xl text-[#727D73]/70 max-w-2xl mx-auto">
+            Answer a few questions to create the perfect developer setup guide for your project
+          </p>
+
+          {/* Progress Indicator */}
+          <div className="flex justify-center mt-8">
+            <div className="flex items-center space-x-3">
               {questions.map((_, index) => (
-                <div
-                  key={index}
-                  className={`w-3 h-3 rounded-full transition-colors ${
-                    index < currentQuestionIndex
-                      ? "bg-[#AAB99A]"
-                      : index === currentQuestionIndex
-                        ? "bg-[#727D73]"
-                        : "bg-gray-200"
-                  }`}
-                />
+                <div key={index} className="flex items-center">
+                  <div
+                    className={`w-4 h-4 rounded-full transition-all duration-500 ${
+                      index < currentQuestionIndex
+                        ? "bg-gradient-to-r from-[#AAB99A] to-[#727D73] shadow-lg"
+                        : index === currentQuestionIndex
+                          ? "bg-[#727D73] shadow-lg scale-125"
+                          : "bg-gray-200"
+                    }`}
+                  />
+                  {index < questions.length - 1 && (
+                    <div
+                      className={`w-8 h-0.5 mx-2 transition-colors duration-500 ${
+                        index < currentQuestionIndex ? "bg-[#AAB99A]" : "bg-gray-200"
+                      }`}
+                    />
+                  )}
+                </div>
               ))}
             </div>
           </div>
+          <p className="text-sm text-[#727D73]/60 mt-4">
+            Question {currentQuestionIndex + 1} of {questions.length}
+          </p>
         </div>
 
+        {/* Question Card */}
         <Card
           className={`transition-all duration-500 transform ${
-            isAnimating ? "opacity-0 scale-95" : "opacity-100 scale-100"
-          } bg-white shadow-lg border-2 border-[#AAB99A]/20`}
+            isAnimating ? "opacity-0 scale-95 rotate-1" : "opacity-100 scale-100 rotate-0"
+          } bg-white/90 backdrop-blur-sm shadow-2xl border-2 border-[#AAB99A]/30 hover:shadow-3xl`}
         >
-          <CardHeader className="text-center pb-4">
-            <CardTitle className="text-xl text-[#727D73] flex items-center justify-center gap-2">
-              <span className="bg-[#AAB99A] text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold">
+          <CardHeader className="text-center pb-6 bg-gradient-to-r from-[#AAB99A]/5 to-[#727D73]/5 border-b border-[#AAB99A]/20">
+            <div className="flex items-center justify-center mb-6">
+              <div className="text-6xl mb-4">{currentQuestion.icon}</div>
+            </div>
+            <CardTitle className="text-2xl font-bold text-[#727D73] flex items-center justify-center gap-3">
+              <span className="bg-gradient-to-r from-[#AAB99A] to-[#727D73] text-white rounded-full w-10 h-10 flex items-center justify-center text-lg font-bold shadow-lg">
                 {currentQuestionIndex + 1}
               </span>
-              Question {currentQuestionIndex + 1} of {questions.length}
+              Configuration Step
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-6">
+          <CardContent className="p-8 space-y-8">
             <div className="text-center">
-              <h3 className="text-lg font-semibold text-[#727D73] mb-3">{currentQuestion.question}</h3>
-              <p className="text-sm text-[#727D73]/70 mb-6">{currentQuestion.description}</p>
+              <h3 className="text-2xl font-bold text-[#727D73] mb-4 leading-tight">{currentQuestion.question}</h3>
+              <p className="text-lg text-[#727D73]/70 mb-8 max-w-2xl mx-auto leading-relaxed">
+                {currentQuestion.description}
+              </p>
             </div>
 
-            <div className="flex gap-4 justify-center">
+            <div className="flex gap-6 justify-center">
               <Button
                 onClick={() => handleAnswer(currentQuestion.id, true)}
-                className="bg-green-500 hover:bg-green-600 text-white px-8 py-6 text-lg font-semibold rounded-lg flex items-center gap-2 min-w-[120px]"
+                className="group bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-10 py-6 text-xl font-bold rounded-2xl flex items-center gap-3 min-w-[160px] shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
               >
-                <CheckCircle className="h-5 w-5" />
+                <CheckCircle className="h-6 w-6 group-hover:scale-110 transition-transform" />
                 Yes
               </Button>
               <Button
                 onClick={() => handleAnswer(currentQuestion.id, false)}
-                className="bg-red-500 hover:bg-red-600 text-white px-8 py-6 text-lg font-semibold rounded-lg flex items-center gap-2 min-w-[120px]"
+                className="group bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-10 py-6 text-xl font-bold rounded-2xl flex items-center gap-3 min-w-[160px] shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
               >
-                <XCircle className="h-5 w-5" />
+                <XCircle className="h-6 w-6 group-hover:scale-110 transition-transform" />
                 No
               </Button>
             </div>
 
-            <div className="text-center text-xs text-[#727D73]/50 mt-4">
+            <div className="text-center">
               {currentQuestionIndex < questions.length - 1 ? (
-                <span className="flex items-center justify-center gap-1">
-                  Next question will appear automatically <ArrowRight className="h-3 w-3" />
-                </span>
+                <div className="flex items-center justify-center gap-2 text-[#727D73]/50">
+                  <Zap className="h-4 w-4" />
+                  <span className="text-sm font-medium">Next question will appear automatically</span>
+                  <ArrowRight className="h-4 w-4 animate-pulse" />
+                </div>
               ) : (
-                <span>This is the final question</span>
+                <div className="flex items-center justify-center gap-2 text-[#AAB99A]">
+                  <CheckCircle className="h-4 w-4" />
+                  <span className="text-sm font-medium">Final question - you're almost done!</span>
+                </div>
               )}
             </div>
           </CardContent>
