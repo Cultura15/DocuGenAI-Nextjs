@@ -39,3 +39,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# files
+src\app\api\generate-markdown\route.ts
+src\app\pages\doc-Form.tsx
+src\app\pages\document-generator.tsx
+src\app\utils\docxGenerator.ts
+src\app\utils\markdownToDocx.ts
+src\app\utils\promptTemplates.ts
